@@ -9,15 +9,18 @@ const set_sds = async (key = "", value = "") => {
   return request;
 }
 
+const get_sds = async (key = "") => {
+  const request = await redis_connection.get(key);
+  return request
+}
 
+Promise.all([set_sds, get_sds]).then(async results => {
+  
+  const OK = await results[0](KEY, VALUE);
+  const value = await results[1](KEY);
 
-set_sds()
-  .then(result => {
-    result === "OK" && console.log(result)
-    process.exit(0);
-  })
-  .catch(reason => {
-    console.log(reason)
-    process.exit(0)
-  });
+  console.log(OK);
+  console.log(value);
+  process.exit(0);
 
+});
